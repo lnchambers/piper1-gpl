@@ -34,3 +34,7 @@ COPY docker/entrypoint.sh /
 EXPOSE 5000
 
 ENTRYPOINT ["/entrypoint.sh"]
+# Default args to the entrypoint above (server -m <default-voice>); a
+# platform-level start command override, if one is ever set, still takes
+# priority over this.
+CMD ["server", "-m", "en_US-joe-medium"]
