@@ -24,6 +24,11 @@ COPY --from=builder /app/dist/piper_tts-*linux*.whl ./dist/
 RUN pip3 install ./dist/piper_tts-*linux*.whl
 RUN pip3 install 'flask>=3,<4'
 
+RUN python3 -m piper.download_voices --data-dir /data \
+      en_US-lessac-high en_US-amy-medium en_US-kristin-medium en_US-joe-medium \
+      en_GB-alan-medium en_GB-northern_english_male-medium en_GB-alba-medium en_GB-cori-high \
+      de_DE-thorsten_emotional-medium
+
 COPY docker/entrypoint.sh /
 
 EXPOSE 5000
