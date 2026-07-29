@@ -29,12 +29,10 @@ RUN python3 -m piper.download_voices --data-dir /data \
       en_GB-alan-medium en_GB-northern_english_male-medium en_GB-alba-medium en_GB-cori-high \
       de_DE-thorsten_emotional-medium
 
-COPY docker/entrypoint.sh /
-
 EXPOSE 5000
 
-ENTRYPOINT ["/entrypoint.sh"]
-# Default args to the entrypoint above (server -m <default-voice>); a
-# platform-level start command override, if one is ever set, still takes
-# priority over this.
-CMD ["server", "-m", "en_US-joe-medium"]
+# No ENTRYPOINT: Railway's container runtime execs CMD directly rather than
+# combining it with ENTRYPOINT the way plain Docker does, so entrypoint.sh's
+# "server" keyword (a shell-script convenience, not a real binary) isn't
+# resolvable there. CMD is the full, standalone server invocation instead.
+CMD ["python3", "-m", "piper.http_server", "--host", "0.0.0.0", "--data-dir", "/data", "-m", "en_US-joe-medium"]
